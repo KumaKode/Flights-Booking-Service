@@ -1,7 +1,7 @@
 {
   "name": "flights-booking-service",
   "version": "1.0.0",
-  "description": "A booking service for flights  service ",
+  "description": "A booking service for flights service ",
   "main": "index.js",
   "scripts": {
     "dev": "nodemon src/index.js"
