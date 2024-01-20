@@ -1,5 +1,6 @@
 const CrudRepository = require("./crud-repository");
 const { Booking } = require("../models");
+const { Op } = require("sequelize");
 
 class BookingRepository extends CrudRepository {
   constructor() {

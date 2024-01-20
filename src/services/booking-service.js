@@ -1,8 +1,8 @@
-const axios = require("axios");
-const { ServerConfig } = require("../config");
-
-const { BookingRepository } = require("../repositories");
 const { StatusCodes } = require("http-status-codes");
+const axios = require("axios");
+
+const { ServerConfig, QueueConfig } = require("../config");
+const { BookingRepository } = require("../repositories");
 const db = require("../models");
 const AppError = require("../utils/errors/app-error");
 
@@ -94,44 +94,59 @@ async function cancelBooking(bookingId) {
 async function makePayment(data) {
   console.log(data);
   const transaction = await db.sequelize.transaction();
+
   try {
     const bookingDetails = await bookingRepository.get(
       data.bookingId,
       transaction
     );
+
     if (bookingDetails.status === "Cancelled") {
       throw new AppError("The booking has expired", StatusCodes.BAD_REQUEST);
     }
-    console.log(bookingDetails);
-    const bookingTime = new Date(bookingDetails.createdAt);
 
+    const bookingTime = new Date(bookingDetails.createdAt);
     const currentTime = new Date();
-    console.log(currentTime - bookingTime);
+
     if (currentTime - bookingTime > 300000) {
       await cancelBooking(data.bookingId);
       throw new AppError("The booking has expired", StatusCodes.BAD_REQUEST);
     }
+
     if (bookingDetails.totalCost != data.totalCost) {
       throw new AppError(
         "The amount of the payment doesnt match",
         StatusCodes.BAD_REQUEST
       );
     }
+
     if (bookingDetails.userId != data.userId) {
       throw new AppError(
         "The user corresponding to the booking doesnt match",
         StatusCodes.BAD_REQUEST
       );
     }
+
     // we assume here that payment is successful
     await bookingRepository.update(
       data.bookingId,
       { status: "Booked" },
       transaction
     );
+
+    const user = await axios.get(
+      `${ServerConfig.User_Service}/api/v1/users/${data.userId}`
+    );
+
+    await QueueConfig.sendData({
+      to: user.data.data.email,
+      subject: "Booking Confirmed",
+      text: `Booking Confirmed for flight ${bookingDetails.flightId}`,
+    });
+
     await transaction.commit();
   } catch (error) {
-    //console.log(error);
+    console.log(error);
     if (
       error.name === "SequelizeValidationError" ||
       error.name === "SequelizeUniqueConstraintError"

@@ -11,13 +11,6 @@ function validateCreateRequest(req, res, next) {
     );
     return res.status(StatusCodes.BAD_REQUEST).json(ErrorResponse);
   }
-  if (!req.body.userId) {
-    ErrorResponse.error = new AppError(
-      ["userId not found in the incoming request"],
-      StatusCodes.BAD_REQUEST
-    );
-    return res.status(StatusCodes.BAD_REQUEST).json(ErrorResponse);
-  }
   next();
 }
 
@@ -26,13 +19,6 @@ function validatePaymentRequest(req, res, next) {
   if (!req.body.totalCost) {
     ErrorResponse.error = new AppError(
       ["totalCost not found in the incoming request"],
-      StatusCodes.BAD_REQUEST
-    );
-    return res.status(StatusCodes.BAD_REQUEST).json(ErrorResponse);
-  }
-  if (!req.body.userId) {
-    ErrorResponse.error = new AppError(
-      ["userId not found in the incoming request"],
       StatusCodes.BAD_REQUEST
     );
     return res.status(StatusCodes.BAD_REQUEST).json(ErrorResponse);

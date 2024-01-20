@@ -8,7 +8,7 @@ async function createBooking(req, res) {
   try {
     const booking = await BookingService.createBooking({
       flightId: req.body.flightId,
-      userId: req.body.userId,
+      userId: req.headers["user-id"], //req.user,
       noOfSeats: req.body.noOfSeats,
     });
     SuccessResponse.data = booking;
@@ -36,7 +36,7 @@ async function makePayment(req, res) {
 
     const booking = await BookingService.makePayment({
       totalCost: req.body.totalCost,
-      userId: req.body.userId,
+      userId: req.headers["user-id"],
       bookingId: req.body.bookingId,
     });
 
