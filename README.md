@@ -27,9 +27,9 @@ Lets take a look inside the `src` folder
 - Download this template from github and open it in your favourite text editor.
 - Go inside the folder path and execute the following command:
 
-```
-npm install
-```
+  ```
+    npm install
+  ```
 
 - In the root directory create a `.env` file and add the following env variables
   ```
@@ -43,20 +43,25 @@ npm install
   ```
     npx sequelize init
   ```
-- By executing the above command you will get migrations and seeders folder along with a config.json inside the config folder.
+- By executing the above command you will get migrations and seeders folder along with a config.json inside the config folder. Edit the config.json file according to your needs.
+
+- Create Database with the following command
+  ```
+  npx sequelize db:create
+  ```
 - Setup tables by seeing the `models` folder and run the following command:
 
-```
-npx sequelize model:generate --name tableName --attributes attributeName:attributeType,attributeName:attributeType
-```
+  ```
+    npx sequelize model:generate --name tableName --attributes attributeName:attributeType,attributeName:attributeType
+  ```
 
 - If you're setting up your development environment, then write the username of your db, password of your db and in dialect mention whatever db you are using for ex: mysql, mariadb etc
 - If you're setting up test or prod environment, make sure you also replace the host with the hosted db url.
 
 - To run the server execute
 
-```
-npm run dev
-```
+  ```
+    npm run dev
+  ```
 
 Creds - @singhsanket143 Instructor

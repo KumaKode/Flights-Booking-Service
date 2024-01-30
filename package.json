@@ -4,7 +4,7 @@
   "description": "A booking service for flights service ",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon src/index.js"
+    "dev": "nodemon -L src/index.js"
   },
   "author": "KumaKode",
   "license": "ISC",
